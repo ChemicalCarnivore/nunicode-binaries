@@ -1,0 +1,27 @@
+name: Cross-Compile for Multiple Architectures
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build Binaries
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        architecture: [linux-x86_64, linux-arm64, win64]
+
+    steps:
+    - name: Set up dependencies
+      run: sudo apt-get update
+
+    - name: Install cross-compilers and dependencies
+      run: |
+        sudo apt-get install -y \
+          gcc-aarch64-linux-gnu \
+          gcc-x86-64-linux-gnu \
+          gcc-mingw-w64-x86-64 \
+          cmake \
+          zip
+          doxygen
