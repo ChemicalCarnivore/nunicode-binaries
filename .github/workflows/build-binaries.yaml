@@ -8,10 +8,6 @@ jobs:
     name: Build Binaries
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        architecture: [linux-x86_64, linux-arm64, win64]
-
     steps:
     - name: Set up dependencies
       run: sudo apt-get update
@@ -24,4 +20,3 @@ jobs:
           gcc-mingw-w64-x86-64 \
           cmake \
           zip
-          doxygen
