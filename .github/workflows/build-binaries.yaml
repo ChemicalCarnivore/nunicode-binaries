@@ -21,6 +21,13 @@ jobs:
           cmake \
           zip
 
+    - name: Checkout nunicode repository from Bitbucket (specific tag)
+      run: |
+        git clone https://bitbucket.org/alekseyt/nunicode.git
+        cd nunicode
+        git checkout 1.11
+
+
     - name: Build for linux-x86_64
       run: |
         cd nunicode/staging
