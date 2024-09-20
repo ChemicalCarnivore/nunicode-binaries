@@ -33,4 +33,4 @@ jobs:
         cd nunicode/staging
         mkdir -p build_amd64
         (cd build_amd64 && cmake ../.. -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=../../cmake/Toolchain-Amd64.cmake)
-        (cd build_amd64 && cat Makefile)
+        (cd build_amd64 && cat CMakeFiles/Makefile2)
