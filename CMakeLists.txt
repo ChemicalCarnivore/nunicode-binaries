@@ -66,5 +66,5 @@ if(CMAKE_BUILD_TYPE MATCHES PROF)
 	endif(SQLITE3_FOUND)
 endif(CMAKE_BUILD_TYPE MATCHES PROF)
 
-set(SQLITE3_INCLUDE_DIR "/usr/include")
+set(SQLITE3_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/include")
 add_subdirectory(sqlite3)

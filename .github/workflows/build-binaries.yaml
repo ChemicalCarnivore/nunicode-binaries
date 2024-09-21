@@ -34,6 +34,8 @@ jobs:
       run: |
         cp cmake/Toolchain-Mingw64.cmake nunicode/cmake/
         cp -f CMakeLists.txt nunicode/
+        mkdir -p nunicode/include
+        cp include/* nunicode/include/
 
 
     - name: Build for linux-x86_64
