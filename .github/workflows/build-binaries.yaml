@@ -20,6 +20,7 @@ jobs:
         sudo apt-get install -y \
           gcc-x86-64-linux-gnu \
           gcc-mingw-w64-x86-64 \
+          gcc-aarch64-linux-gnu \
           cmake \
           zip \
           tree
@@ -32,18 +33,16 @@ jobs:
 
     - name: Copy cmake file and toolchain files from this repository
       run: |
-        cp cmake/Toolchain-Mingw64.cmake nunicode/cmake/
+        cp cmake/* nunicode/cmake/
         cp -f CMakeLists.txt nunicode/
         mkdir -p nunicode/include
         cp include/* nunicode/include/
-
 
     - name: Build for linux-x86_64
       run: |
         cd nunicode/staging
         mkdir -p build_amd64
         (cd build_amd64 && cmake ../.. -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=../../cmake/Toolchain-Amd64.cmake)
-        (cd build_amd64 && tree)
         (cd build_amd64 && make nusqlite3)
 
     - name: Build for win64
@@ -52,3 +51,10 @@ jobs:
         mkdir -p build_mingw64
         (cd build_mingw64 && cmake ../.. -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=../../cmake/Toolchain-Mingw64.cmake)
         (cd build_mingw64 && make nusqlite3)
+
+    - name: Build for Arm64
+      run: |
+        cd nunicode/staging
+        mkdir -p build_arm64
+        (cd build_arm64 && cmake ../.. -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=../../cmake/Toolchain-Arm64.cmake)
+        (cd build_arm64 && make nusqlite3)
