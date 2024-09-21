@@ -48,4 +48,5 @@ jobs:
         cd nunicode/staging
         mkdir -p build_mingw64
         (cd build_mingw64 && cmake ../.. -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=../../cmake/Toolchain-Mingw64.cmake)
+        (cd /usr/include && tree)
         (cd build_mingw64 && make nusqlite3)
