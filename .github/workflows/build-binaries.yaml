@@ -30,9 +30,10 @@ jobs:
         cd nunicode
         git checkout 1.11
 
-    - name: Copy toolchain files from this repository
+    - name: Copy cmake file and toolchain files from this repository
       run: |
         cp cmake/Toolchain-Mingw64.cmake nunicode/cmake/
+        cp -f CMakeLists.txt nunicode/
 
 
     - name: Build for linux-x86_64
@@ -48,5 +49,5 @@ jobs:
         cd nunicode/staging
         mkdir -p build_mingw64
         (cd build_mingw64 && cmake ../.. -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=../../cmake/Toolchain-Mingw64.cmake)
-        (cd build_mingw64 && cmake ../../sqlite3 -DSQLITE3_INCLUDE_DIR=/usr/include -DCMAKE_BUILD_TYPE=Release -D-DCMAKE_TOOLCHAIN_FILE=../../cmmake/Toolchain-Mingw64.cmake)
+        (cd build_mingw64 && cmake ../../sqlite3 -DCMAKE_BUILD_TYPE=Release -D-DCMAKE_TOOLCHAIN_FILE=../../cmmake/Toolchain-Mingw64.cmake)
         (cd build_mingw64 && make nusqlite3)
