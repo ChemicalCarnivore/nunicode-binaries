@@ -1,4 +1,4 @@
-cmake_minimum_required (VERSION 2.8.12)
+cmake_minimum_required (VERSION 3.5)
 project(libnu C)
 
 option(NU_BUILD_TESTS "Build tests, only with Debug config" OFF)
