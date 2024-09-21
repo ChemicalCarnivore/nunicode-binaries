@@ -49,4 +49,3 @@ jobs:
         mkdir -p build_mingw64
         (cd build_mingw64 && cmake ../.. -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=../../cmake/Toolchain-Mingw64.cmake)
         (cd build_mingw64 && make nusqlite3)
-        zip -j "libnusqlite3-$(BUILD)-win64.zip" build_mingw64/sqlite3/libnusqlite3.dll        
