@@ -15,9 +15,7 @@ jobs:
     - name: Install cross-compilers and dependencies
       run: |
         sudo apt-get install -y \
-          gcc-aarch64-linux-gnu \
           gcc-x86-64-linux-gnu \
-          gcc-mingw-w64-x86-64 \
           cmake \
           zip \
           tree
@@ -35,4 +33,4 @@ jobs:
         mkdir -p build_amd64
         (cd build_amd64 && cmake ../.. -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=../../cmake/Toolchain-Amd64.cmake)
         (cd build_amd64 && tree)
-        (cd build_amd64 && make nusqlite3)
+        (cd build_amd64 && make VERBOSE=1 nusqlite3)
