@@ -42,11 +42,6 @@ jobs:
           ${{ matrix.cross-compiler }} \
           cmake
 
-    - name: Install cross-compilers and dependencies (MacOS)
-      if: matrix.os == 'macos-latest'
-      run: |
-        brew install cmake
-
     - name: Checkout nunicode repository from Bitbucket (specific tag)
       run: |
         git clone https://bitbucket.org/alekseyt/nunicode.git
@@ -68,7 +63,7 @@ jobs:
         (cd build_${{ matrix.platform }} && make VERBOSE=1 nusqlite3)
 
     - name: Upload binaries for ${{ matrix.platform }}
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: libnusqlite3-${{ matrix.platform }}
         path: nunicode/staging/build_${{ matrix.platform }}/sqlite3/libnusqlite3.*
