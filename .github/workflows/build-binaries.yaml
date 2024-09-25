@@ -6,24 +6,39 @@ on:
 jobs:
   build:
     name: Build Binaries
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        platform: [linux-x64, linux-arm64, win-x64]
+        include:
+          - platform: linux-x64
+            cross-compiler: gcc-x86-64-linux-gnu
+            toolchain: Toolchain-Amd64.cmake
+            os: ubuntu-latest
+          - platform: linux-arm64
+            cross-compiler: gcc-aarch64-linux-gnu
+            toolchain: Toolchain-Arm64.cmake
+            os: ubuntu-latest
+          - platform: win-x64
+            cross-compiler: gcc-mingw-w64-x86-64
+            toolchain: Toolchain-Mingw64.cmake
+            os: ubuntu-latest
+    runs-on: ${{ matrix.os }}
 
     steps:
     - name: Checkout this repository (nunicode-binaries)
       uses: actions/checkout@v3
 
     - name: Set up dependencies
+      if: matrix.os == 'ubuntu-latest'
       run: sudo apt-get update
 
     - name: Install cross-compilers and dependencies
+      if: matrix.os == 'ubuntu-latest'
       run: |
         sudo apt-get install -y \
-          gcc-x86-64-linux-gnu \
-          gcc-mingw-w64-x86-64 \
-          gcc-aarch64-linux-gnu \
+          ${{ matrix.cross-compiler }} \
           cmake \
-          zip \
-          tree
+          zip
 
     - name: Checkout nunicode repository from Bitbucket (specific tag)
       run: |
@@ -38,33 +53,15 @@ jobs:
         mkdir -p nunicode/include
         cp include/* nunicode/include/
 
-    - name: Build for linux-x86_64
+    - name: Build for ${{ matrix.platform }}
       run: |
         cd nunicode/staging
-        mkdir -p build_amd64
-        (cd build_amd64 && cmake ../.. -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=../../cmake/Toolchain-Amd64.cmake)
-        (cd build_amd64 && make VERBOSE=1 nusqlite3)
-        zip -j "libnusqlite3-amd64.zip" build_amd64/sqlite3/libnusqlite3.so
+        mkdir -p build_${{ matrix.platform }}
+        (cd build_${{ matrix.platform }} && cmake ../.. -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=../../cmake/${{ matrix.toolchain }})
+        (cd build_${{ matrix.platform }} && make VERBOSE=1 nusqlite3)
 
-    - name: Build for win64
-      run: |
-        cd nunicode/staging
-        mkdir -p build_mingw64
-        (cd build_mingw64 && cmake ../.. -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=../../cmake/Toolchain-Mingw64.cmake)
-        (cd build_mingw64 && make VERBOSE=1 nusqlite3)
-        zip -j "libnusqlite3-win64.zip" build_mingw64/sqlite3/libnusqlite3.dll
-
-    - name: Build for Arm64
-      run: |
-        cd nunicode/staging
-        mkdir -p build_arm64
-        (cd build_arm64 && cmake ../.. -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=../../cmake/Toolchain-Arm64.cmake)
-        (cd build_arm64 && make VERBOSE=1 nusqlite3)
-        zip -j "libnusqlite3-arm64.zip" build_arm64/sqlite3/libnusqlite3.so
-
-    - name: Upload binaries
+    - name: Upload binaries for ${{ matrix.platform }}
       uses: actions/upload-artifact@v3
       with:
-        name: compiled-binaries
-        path: |
-          nunicode/staging/libnusqlite3-*.zip        
+        name: libnusqlite3-${{ matrix.platform }}
+        path: nunicode/staging/build_${{ matrix.platform }}/sqlite3/libnusqlite3.*
