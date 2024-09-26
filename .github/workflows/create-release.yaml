@@ -1,0 +1,23 @@
+name: Create a nunicode-binaries release
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  trigger-build:
+    uses: ./.github/workflows/build-binaries.yaml
+
+  create-release:
+    needs: trigger-build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download build artifacts
+        uses: actions/download-artifact@v2
+        
+      - name: Print downloaded files
+        run: ls -R
+      

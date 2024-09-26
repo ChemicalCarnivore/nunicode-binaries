@@ -2,32 +2,33 @@ name: Cross-Compile for Multiple Architectures
 
 on:
   workflow_dispatch:
+  workflow_call:
 
 jobs:
   build:
     name: Build Binaries
     strategy:
       matrix:
-        platform: [linux-x64, linux-arm64, win-x64, macos]
+        platform: [linux-amd64, linux-arm64, win-amd64, osx-arm64]
         include:
-          - platform: linux-x64
+          - platform: linux-amd64
             cross-compiler: gcc-x86-64-linux-gnu
             toolchain: Toolchain-Amd64.cmake
-            shared-suffix: so
+            lib-suffix: so
             os: ubuntu-latest
           - platform: linux-arm64
             cross-compiler: gcc-aarch64-linux-gnu
             toolchain: Toolchain-Arm64.cmake
-            shared-suffix: so
+            lib-suffix: so
             os: ubuntu-latest
-          - platform: win-x64
+          - platform: win-amd64
             cross-compiler: gcc-mingw-w64-x86-64
             toolchain: Toolchain-Mingw64.cmake
-            shared-suffix: dll
+            lib-suffix: dll
             os: ubuntu-latest
-          - platform: macos
+          - platform: osx-arm64
             toolchain: Toolchain-Mac64.cmake
-            shared-suffix: dylib
+            lib-suffix: dylib
             os: macos-latest
     runs-on: ${{ matrix.os }}
 
@@ -70,4 +71,4 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: libnusqlite3-${{ matrix.platform }}
-        path: nunicode/staging/build_${{ matrix.platform }}/sqlite3/libnusqlite3.${{ matrix.shared-suffix }}
+        path: nunicode/staging/build_${{ matrix.platform }}/sqlite3/libnusqlite3.${{ matrix.lib-suffix }}
