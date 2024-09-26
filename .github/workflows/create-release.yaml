@@ -18,6 +18,14 @@ jobs:
       - name: Download build artifacts
         uses: actions/download-artifact@v4
         
-      - name: Print downloaded files
-        run: ls -R
+      - name: Create a release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: ${{ github.ref }}
+          draft: true
+          prerelease: false
+
       
