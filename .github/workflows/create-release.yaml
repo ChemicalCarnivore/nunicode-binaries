@@ -2,6 +2,11 @@ name: Create a nunicode-binaries release
 
 on:
   workflow_dispatch:
+    inputs:
+      tag_name:
+        description: 'Tag name'
+        required: true
+        default: 'v1.0.0'
   push:
     tags:
       - '*'
@@ -18,17 +23,6 @@ jobs:
       - name: Download build artifacts
         uses: actions/download-artifact@v4
         
-      - name: Create a release
-        id: create-release
-        uses: actions/create-release@v1        
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ github.ref }}
-          release_name: ${{ github.ref }}
-          draft: true
-          prerelease: false
-
       - name: Zip Subdirectories to Root
         run: |
           for dir in libnusqlite3-*/; do
@@ -42,5 +36,7 @@ jobs:
       - name: Create Release and Upload Assets
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.tag_name || github.ref }}
+          draft: true
           files: '*.zip'
       
