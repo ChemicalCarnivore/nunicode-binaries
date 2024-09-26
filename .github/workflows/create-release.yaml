@@ -1,12 +1,6 @@
 name: Create a nunicode-binaries release
 
 on:
-  workflow_dispatch:
-    inputs:
-      tag_name:
-        description: 'Tag name'
-        required: true
-        default: 'v1.0.0'
   push:
     tags:
       - '*'
@@ -36,7 +30,6 @@ jobs:
       - name: Create Release and Upload Assets
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.tag_name || github.ref }}
           draft: true
           files: '*.zip'
       
