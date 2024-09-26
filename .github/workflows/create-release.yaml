@@ -19,7 +19,8 @@ jobs:
         uses: actions/download-artifact@v4
         
       - name: Create a release
-        uses: actions/create-release@v1
+        id: create-release
+        uses: actions/create-release@v1        
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -27,5 +28,24 @@ jobs:
           release_name: ${{ github.ref }}
           draft: true
           prerelease: false
+
+      - name: Zip Subdirectories to Root
+        run: |
+          for dir in libnusqlite3-*/; do
+            if [ -d "$dir" ]; then
+              cd "$dir"
+              zip -r "../${dir%/}.zip" *  # Zip the contents, not the directory itself
+              cd ..
+            fi
+          done      
+
+      - name: Upload ZIP Files as Release Assets
+        run: |
+          for file in *.zip; do
+            echo "Uploading $file..."
+            gh release upload ${{ steps.create-release.outputs.upload_url }} "$file"
+          done
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       
