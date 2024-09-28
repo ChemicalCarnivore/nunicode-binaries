@@ -1,10 +1,7 @@
 name: Install SQLite on macOS
 
 on:
-  push:
-    branches:
-      - main
-  pull_request:
+    workflow_dispatch:
 
 jobs:
   install-sqlite:
@@ -22,5 +19,5 @@ jobs:
       - name: Print SQLite include directory
         run: |
           echo "SQLite include directory:"
-          brew --prefix sqlite/include
+          brew --prefix sqlite
           ls -l $(brew --prefix sqlite)/include
