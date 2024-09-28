@@ -1,0 +1,26 @@
+name: Install SQLite on macOS
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  install-sqlite:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Update Homebrew and install SQLite
+        run: |
+          brew update
+          brew install sqlite
+
+      - name: Print SQLite include directory
+        run: |
+          echo "SQLite include directory:"
+          brew --prefix sqlite/include
+          ls -l $(brew --prefix sqlite)/include
