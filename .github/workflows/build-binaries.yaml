@@ -60,7 +60,7 @@ jobs:
         mkdir -p nunicode/include
 
     - name: Copy sqlite include files from their respective locations
-      run: cp ${{ matrix.os == 'ubuntu-latest' && '/usr/include' || '/opt/brew/opt/sqlite/include' }}/sqlite3*.h nunicode/include/
+      run: cp ${{ matrix.os == 'ubuntu-latest' && '/usr/include' || '/opt/homebrew/opt/sqlite/include' }}/sqlite3*.h nunicode/include/
 
     - name: Build for ${{ matrix.platform }}
       run: |
