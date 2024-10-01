@@ -69,13 +69,11 @@ jobs:
         (cd build_${{ matrix.platform }} && cmake ../.. -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=../../cmake/${{ matrix.toolchain }})
         (cd build_${{ matrix.platform }} && make VERBOSE=1 nusqlite3)
 
-    - name: Check the build with lipo on macOS
+    - name: Check the cmake cache file
       if: matrix.os == 'macos-latest' && matrix.platform == 'osx-arm64'
       run: |
-        cd nunicode/staging/build_${{ matrix.platform }}/sqlite3
-        ls -la *
-        lipo -info libnusqlite3.dylib
-
+        cat nunicode/staging/build_${{ matrix.platform }}/CMakeCache.txt
+        
     - name: Upload binaries for ${{ matrix.platform }}
       uses: actions/upload-artifact@v4
       with:
