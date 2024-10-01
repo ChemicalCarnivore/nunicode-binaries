@@ -65,8 +65,9 @@ jobs:
     - name: Build for ${{ matrix.platform }}
       run: |
         cd nunicode/staging
-        mkdir -p build_${{ matrix.platform }}
-        (cd build_${{ matrix.platform }} && cmake ../.. -DCMAKE_OSX_ARCHITECTURES="x86_64;arm64" -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=../../cmake/${{ matrix.toolchain }})
+        rm -rf build_${{ matrix.platform }}
+        mkdir -p build_${{ matrix.platform }}      
+        (cd build_${{ matrix.platform }} && cat ../../cmake/${{ matrix.toolchain }} && cmake ../.. -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=../../cmake/${{ matrix.toolchain }})
         (cd build_${{ matrix.platform }} && make VERBOSE=1 nusqlite3)
 
     - name: Check the cmake cache file and lipo info
