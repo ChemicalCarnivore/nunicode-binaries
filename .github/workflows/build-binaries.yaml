@@ -66,14 +66,15 @@ jobs:
       run: |
         cd nunicode/staging
         mkdir -p build_${{ matrix.platform }}
-        (cd build_${{ matrix.platform }} && cmake ../.. -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=../../cmake/${{ matrix.toolchain }})
+        (cd build_${{ matrix.platform }} && cmake ../.. -DCMAKE_OSX_ARCHITECTURES="x86_64;arm64" -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=../../cmake/${{ matrix.toolchain }})
         (cd build_${{ matrix.platform }} && make VERBOSE=1 nusqlite3)
 
-    - name: Check the cmake cache file
+    - name: Check the cmake cache file and lipo info
       if: matrix.os == 'macos-latest' && matrix.platform == 'osx-arm64'
       run: |
         cat nunicode/staging/build_${{ matrix.platform }}/CMakeCache.txt
-        
+        lipo -info nunicode/staging/build_${{ matrix.platform }}/sqlite3/libnusqlite3.dylib
+
     - name: Upload binaries for ${{ matrix.platform }}
       uses: actions/upload-artifact@v4
       with:
