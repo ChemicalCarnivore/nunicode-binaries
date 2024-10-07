@@ -31,7 +31,7 @@ jobs:
             lib-suffix: dylib
             os: macos-latest
           - platform: linux-musl-x64
-            package: musl-gcc
+            package: musl-tools
             toolchain: Toolchain-Musl-Amd64.cmake
             lib-suffix: so
             os: ubuntu-latest
