@@ -62,7 +62,7 @@ jobs:
       run: |
         curl -LO https://musl.cc/aarch64-linux-musl-cross.tgz
         tar -xzf aarch64-linux-musl-cross.tgz
-        cp -r aarch64-linux-musl-cross /usr/local/
+        sudo cp -r aarch64-linux-musl-cross /usr/local/
 
     - name: Checkout nunicode repository from Bitbucket (specific tag)
       run: |
