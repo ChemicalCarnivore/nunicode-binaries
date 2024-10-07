@@ -9,20 +9,20 @@ jobs:
     name: Build Binaries
     strategy:
       matrix:
-        platform: [linux-x64, linux-arm64, win-x64, osx-arm64]
+        platform: [linux-x64, linux-arm64, win-x64, osx-arm64, linux-musl-x64, linux-musl-arm64]
         include:
           - platform: linux-x64
-            compiler: gcc-x86-64-linux-gnu
+            package: gcc-x86-64-linux-gnu
             toolchain: Toolchain-Amd64.cmake
             lib-suffix: so
             os: ubuntu-latest
           - platform: linux-arm64
-            compiler: gcc-aarch64-linux-gnu
+            package: gcc-aarch64-linux-gnu
             toolchain: Toolchain-Arm64.cmake
             lib-suffix: so
             os: ubuntu-latest
           - platform: win-x64
-            compiler: gcc-mingw-w64-x86-64
+            package: gcc-mingw-w64-x86-64
             toolchain: Toolchain-Mingw64.cmake
             lib-suffix: dll
             os: ubuntu-latest
@@ -30,6 +30,16 @@ jobs:
             toolchain: Toolchain-Mac64.cmake
             lib-suffix: dylib
             os: macos-latest
+          - platform: linux-musl-x64
+            package: musl-gcc
+            toolchain: Toolchain-Musl-Amd64.cmake
+            lib-suffix: so
+            os: ubuntu-latest
+          - platform: linux-musl-arm64
+            package: 
+            toolchain: Toolchain-Musl-Arm64.cmake
+            lib-suffix: so
+            os: ubuntu-latest
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -44,8 +54,15 @@ jobs:
       if: matrix.os == 'ubuntu-latest'
       run: |
         sudo apt-get install -y \
-          ${{ matrix.compiler }} \
+          ${{ matrix.package }} \
           cmake
+
+    - name: Install cross-compilers and dependencies (linux-musl-arm64)
+      if: matrix.platform == 'linux-musl-arm64'
+      run: |
+        curl -LO https://musl.cc/aarch64-linux-musl-cross.tgz
+        tar -xzf aarch64-linux-musl-cross.tgz
+        cp -r aarch64-linux-musl-cross /usr/local/
 
     - name: Checkout nunicode repository from Bitbucket (specific tag)
       run: |
