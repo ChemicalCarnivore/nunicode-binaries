@@ -6,8 +6,12 @@ This includes the following platforms:
   - Cross-compiled using MinGW-w64
 - Linux x64 (linux-x64)
   - Compiled natively using GCC
+- Linux musl x64 (linux-musl-x64)
+  - Compiled natively using musl-gcc
 - Linux arm64 (linux-arm64)
   - Cross-compiled using gcc-aarch64-linux-gnu
+- Linux musl arm64 (linux-musl-arm64)
+  - Cross-compiled using aarch64-linux-musl-cross
 - MacOS 64 (osx-arm64) - will work on both x64 and arm64
   - Compiled natively using clang
 
