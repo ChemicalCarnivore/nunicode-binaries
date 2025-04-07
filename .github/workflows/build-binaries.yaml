@@ -12,7 +12,7 @@ jobs:
         platform: [linux-x64, linux-arm64, win-x64, osx-arm64, linux-musl-x64, linux-musl-arm64, linux-arm7]
         include:
           - platform: linux-arm7
-            package: arm-linux-gnueabihf
+            package: gcc-arm-linux-gnueabihf
             toolchain: Toolchain-Arm7.cmake
             lib-suffix: so
             os: ubuntu-latest
